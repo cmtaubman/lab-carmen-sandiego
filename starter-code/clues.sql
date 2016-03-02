@@ -68,10 +68,12 @@ SELECT name, countrycode FROM city WHERE population = 91084;
 -- BONUS
 
 -- 1. List the distinct regions in the Country table.
-SELECT region FROM country;
+SELECT DISTINCT region FROM country;
 
 -- 2. How many countries are located in European regions?
-SELECT name FROM country WHERE region LIKE '%Europe';
+SELECT COUNT(*) FROM country WHERE continent ='Europe';
+
+name FROM country WHERE region LIKE '%Europe';
 
 34 countries
 
@@ -79,7 +81,7 @@ SELECT name FROM country WHERE region LIKE '%Europe';
 
 -- SELECT region, population FROM country;
 
-SELECT region, SUM(population)
+SELECT region, SUM(population) AS sum_population
 FROM country
 GROUP BY region;
 
@@ -88,19 +90,24 @@ GROUP BY region;
 --     i.  Find the countries which have the most spoken languages used
 --     ii. Find the maximum number of languages you can use in one country
 
-SELECT countrycode, language
+SELECT countrycode, COUNT(language) AS count_language
 FROM countrylanguage
-GROUP BY language;
-???
+GROUP BY countrycode;
+ORDER BY count_language DESC;
+
 
 -- 5. Find all the Asia countries that went independent from 1940 to 1950. Order the result by the year of independence.
-SELECT region, name, indepyear FROM country;
-WHERE region LIKE '%Asia' AND indepyear BETWEEN 1940 AND 1950
+SELECT name, continent, indepyear
+FROM country;
+WHERE continent= 'Asia' AND indepyear BETWEEN 1940 AND 1950
 ORDER BY indepyear ASC;
-???
+
+
+
 
 -- 6. Find all the countries that do not use English at all
 
-SELECT countrycode
+SELECT countrycode, language
 FROM countrylanguage
-WHERE countrylanguage NOT LIKE '%English%';
+WHERE (language = 'English' AND percentage=0) and language != 'English'
+ORDER BY percentage ASC;
